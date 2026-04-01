@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+}
+
+@theme {
+  --brand-primary: #bc4077;
+  --brand-primary-dark: #9b2f60;
+  --brand-primary-soft: #f4d7e3;
+  --color-background: var(--brand-primary-soft);
+  --color-foreground: #1a1a1a;
+  --color-card: #ffffff;
+  --color-card-foreground: #1a1a1a;
+  --color-primary: var(--brand-primary);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #e8bfd2;
+  --color-secondary-foreground: #1a1a1a;
+  --color-muted: #eac7d8;
+  --color-muted-foreground: #7b4a60;
+  --color-accent: var(--brand-primary-dark);
+  --color-accent-foreground: #ffffff;
+  --color-border: #ddb2c7;
+  --color-input: #f0ccd9;
+  --color-ring: var(--brand-primary-dark);
+  --radius: 0.5rem;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Playfair Display', serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Framer Motion useScroll (target !== container) exige un conteneur non-static (defaut: documentElement) */
+  position: relative;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background-color: var(--brand-primary);
+  color: #ffffff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-muted);
+  border-radius: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-muted-foreground);
+}
