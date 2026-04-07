@@ -101,7 +101,16 @@ export function Navbar() {
         >
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 md:flex-row md:items-center">
                 <div className="flex items-center justify-between">
-                    <div className="font-serif text-3xl font-black tracking-tighter">EDIT.</div>
+                    <Link href="/" aria-label="Accueil Mr Microbe">
+                        <img
+                            src="/images/LOGO-MRMICROBE-3D-TRANSPARENT-removebg-preview.png"
+                            alt="Logo Mr Microbe 3D"
+                            className="h-14 w-auto object-contain md:h-16"
+                            onError={(event) => {
+                                event.currentTarget.src = "/icon.svg";
+                            }}
+                        />
+                    </Link>
                     <button
                         type="button"
                         onClick={() => setMobileOpen((v) => !v)}
@@ -229,20 +238,21 @@ export function TheManifesto() {
 
         const ctx = gsap.context(() => {
             const chars = gsap.utils.toArray<HTMLElement>(".manifesto-char", el);
-            gsap.set(chars, { opacity: 0.2, color: "#d6d3d1" });
+            gsap.set(chars, { opacity: 0.06, y: 20, color: "#d6d3d1" });
 
             gsap.to(chars, {
                 opacity: 1,
+                y: 0,
                 color: "#1c1917",
-                ease: "none",
+                ease: "power2.out",
                 stagger: {
-                    each: 0.03,
+                    each: 0.06,
                     from: "start",
                 },
                 scrollTrigger: {
                     trigger: el,
-                    start: "top 75%",
-                    end: "bottom 35%",
+                    start: "top 92%",
+                    end: "bottom 20%",
                     scrub: 1,
                 },
             });
@@ -277,7 +287,9 @@ export function TheManifesto() {
 // 6. Spotlight Bento Grid
 export function SpotlightGrid() {
     return (
-        <section className="bg-[var(--brand-primary-soft)]/65 py-48 px-6 md:px-20 border-y border-[var(--brand-primary)]/20">
+        <section className="relative overflow-hidden bg-[var(--brand-primary-soft)]/65 py-48 px-6 md:px-20 border-y border-[var(--brand-primary)]/20">
+            <div className="pointer-events-none absolute -left-20 top-8 h-56 w-56 rounded-full bg-[var(--brand-primary)]/14 blur-3xl" />
+            <div className="pointer-events-none absolute -right-20 bottom-10 h-64 w-64 rounded-full bg-[var(--brand-primary)]/16 blur-3xl" />
             <div className="max-w-7xl mx-auto">
                 <div className="mb-24 flex items-end justify-between border-b border-[var(--brand-primary-dark)]/60 pb-12">
                     <div>
@@ -288,21 +300,22 @@ export function SpotlightGrid() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 h-[1200px] md:h-[800px]">
-                    <div className="md:col-span-2 group relative overflow-hidden bg-stone-100 rounded-sm shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
+                    <div className="md:col-span-2 group relative overflow-hidden bg-stone-100 rounded-sm border border-[var(--brand-primary)]/25 shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
                         <ParallaxImage src="/images/DSC00575.jpg" alt="Nature" fit="contain" scale={1} disableParallax />
                         <div className="absolute bottom-8 left-8 text-white z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                             <span className="text-[10px] font-bold uppercase tracking-widest">Emotion</span>
                             <h3 className="text-3xl font-serif">Energie organique</h3>
                         </div>
+                        <div className="absolute top-5 right-5 z-20 border border-white/30 bg-black/35 px-3 py-1 text-[9px] font-black uppercase tracking-[0.26em] text-white/80 backdrop-blur-sm">01</div>
                     </div>
-                    <div className="md:col-span-1 group relative overflow-hidden bg-stone-100 rounded-sm shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
+                    <div className="md:col-span-1 group relative overflow-hidden bg-stone-100 rounded-sm border border-[var(--brand-primary)]/25 shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
                         <ParallaxImage src="/images/DSC08913.jpg" alt="Object" fit="contain" scale={1} disableParallax />
                         <div className="absolute bottom-8 left-8 text-white z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                             <span className="text-[10px] font-bold uppercase tracking-widest">Matiere</span>
                             <h3 className="text-2xl font-serif">Forme vivante</h3>
                         </div>
                     </div>
-                    <div className="md:col-span-1 md:row-span-2 group relative overflow-hidden bg-stone-100 rounded-sm shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
+                    <div className="md:col-span-1 md:row-span-2 group relative overflow-hidden bg-stone-100 rounded-sm border border-[var(--brand-primary)]/25 shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
                         <ParallaxImage src="/images/M7_01625.jpg" alt="Model" fit="contain" scale={1} disableParallax />
                     </div>
                     <div className="md:col-span-1 group relative overflow-hidden bg-stone-100 rounded-sm">
@@ -314,7 +327,7 @@ export function SpotlightGrid() {
                             <span className="text-[10px] font-black uppercase tracking-widest">Note d atelier</span>
                         </div>
                     </div>
-                    <div className="md:col-span-2 group relative overflow-hidden bg-stone-100 rounded-sm shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
+                    <div className="md:col-span-2 group relative overflow-hidden bg-stone-100 rounded-sm border border-[var(--brand-primary)]/25 shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
                         <ParallaxImage src="/images/M7_01636.jpg" alt="Interior" fit="contain" scale={1} disableParallax />
                     </div>
                 </div>
@@ -375,38 +388,44 @@ export function TheDialogue() {
         { q: "Comment choisir une oeuvre pour son espace ?", a: "Nous orientons selon la lumiere, le format, l ambiance recherchee et votre budget pour trouver la piece juste." },
         { q: "Pourquoi ces formes organiques ?", a: "Ces formes incarnent l invisible: emotions, tensions et pulsations interieures deviennent visibles sur la toile." }
     ];
+    const active = qa[open] ?? qa[0];
 
     return (
-        <section className="py-48 bg-[var(--brand-primary-soft)] px-6">
-            <div className="max-w-4xl mx-auto">
-                <div className="mb-32">
-                    <h2 className="font-serif text-7xl mt-6 text-stone-900 italic tracking-tighter">En Dialogue.</h2>
+        <section className="relative overflow-hidden bg-[var(--brand-primary-soft)] px-6 py-28">
+            <div className="pointer-events-none absolute -left-16 top-8 h-44 w-44 rounded-full bg-[var(--brand-primary)]/12 blur-3xl" />
+            <div className="pointer-events-none absolute -right-16 bottom-8 h-52 w-52 rounded-full bg-[var(--brand-primary)]/14 blur-3xl" />
+            <div className="mx-auto max-w-5xl">
+                <div className="mb-12">
+                    <h2 className="font-serif text-6xl italic tracking-tighter text-stone-900 md:text-7xl">En Dialogue.</h2>
                 </div>
 
-                <div className="space-y-12">
+                <div className="space-y-4">
                     {qa.map((item, i) => (
-                        <div key={i} className="group cursor-pointer" onClick={() => setOpen(open === i ? -1 : i)}>
-                            <div className="flex justify-between items-center py-8 border-b border-stone-300 group-hover:border-stone-900 transition-colors">
-                                <h3 className="font-serif text-3xl md:text-5xl text-stone-900 tracking-tighter transition-transform group-hover:translate-x-4">
+                        <article
+                            key={item.q}
+                            className={`overflow-hidden rounded-[16px] border transition ${
+                                open === i
+                                    ? "border-[var(--brand-primary)]/40 bg-white shadow-[0_16px_34px_-20px_rgba(28,25,23,0.35)]"
+                                    : "border-[var(--brand-primary)]/22 bg-white/72"
+                            }`}
+                        >
+                            <button
+                                onClick={() => setOpen(i)}
+                                className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left md:px-8"
+                            >
+                                <h3 className="font-serif text-3xl leading-tight text-stone-900 md:text-5xl">
                                     {item.q}
                                 </h3>
-                                {open === i ? <Minus size={32} /> : <Plus size={32} />}
-                            </div>
-                            <AnimatePresence>
-                                {open === i && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: "auto", opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        className="overflow-hidden"
-                                    >
-                                        <p className="py-12 text-2xl font-serif text-stone-600 leading-relaxed max-w-2xl">
-                                            {item.a}
-                                        </p>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
+                                <span className="text-3xl text-stone-700">{open === i ? "−" : "+"}</span>
+                            </button>
+                            {open === i && (
+                                <div className="border-t border-stone-200/70 px-6 py-6 md:px-8 md:py-7">
+                                    <p className="max-w-3xl font-serif text-xl leading-relaxed text-stone-700 md:text-2xl">
+                                        {item.a}
+                                    </p>
+                                </div>
+                            )}
+                        </article>
                     ))}
                 </div>
             </div>

@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import type { CatalogPiece } from "@/lib/catalog-data";
 import { catalogFallbackImage } from "@/lib/catalog-data";
 import { GalleryCornerBrackets } from "@/components/collections/GalleryFrameDecor";
+import { Stars } from "lucide-react";
 
 type Props = {
   piece: CatalogPiece;
@@ -12,16 +14,52 @@ type Props = {
 
 export function CatalogPieceCard({ piece, indexLabel }: Props) {
   const [src, setSrc] = useState(piece.image);
+  const sparkleSeed = piece.title.length + piece.year;
+  const sparkles = Array.from({ length: 6 }, (_, i) => ({
+    id: `${piece.id}-${i}`,
+    left: `${12 + ((sparkleSeed + i * 17) % 72)}%`,
+    top: `${10 + ((sparkleSeed + i * 23) % 70)}%`,
+    delay: i * 0.22,
+    duration: 1.9 + (i % 3) * 0.55,
+  }));
 
   useEffect(() => {
     setSrc(piece.image);
   }, [piece.image]);
 
   return (
-    <article className="group relative h-full border border-stone-900/15 bg-[#ebe6dc] p-3 shadow-[0_1px_2px_rgba(28,25,23,0.04),0_20px_40px_-18px_rgba(28,25,23,0.2)] transition-[box-shadow,transform] duration-500 md:p-5 md:shadow-[0_1px_2px_rgba(28,25,23,0.05),0_28px_50px_-20px_rgba(28,25,23,0.24)] md:hover:shadow-[0_1px_3px_rgba(28,25,23,0.06),0_32px_56px_-16px_rgba(28,25,23,0.3)]">
+    <article className="group relative h-full overflow-hidden border border-stone-900/15 bg-[#ebe6dc] p-3 shadow-[0_1px_2px_rgba(28,25,23,0.04),0_20px_40px_-18px_rgba(28,25,23,0.2)] transition-[box-shadow,transform] duration-500 md:p-5 md:shadow-[0_1px_2px_rgba(28,25,23,0.05),0_28px_50px_-20px_rgba(28,25,23,0.24)] md:hover:shadow-[0_1px_3px_rgba(28,25,23,0.06),0_32px_56px_-16px_rgba(28,25,23,0.3)]">
+      <motion.div
+        className="pointer-events-none absolute -inset-x-10 -top-24 h-32 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+        animate={{ x: ["-45%", "145%"], opacity: [0, 0.65, 0] }}
+        transition={{ duration: 2.9, repeat: Infinity, repeatDelay: 1.8, ease: "easeInOut" }}
+        aria-hidden
+      />
+      <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden>
+        {sparkles.map((star) => (
+          <motion.span
+            key={star.id}
+            className="absolute text-[#be185d]/65"
+            style={{ left: star.left, top: star.top }}
+            animate={{
+              opacity: [0.2, 0.9, 0.25],
+              scale: [0.72, 1.2, 0.8],
+              rotate: [0, 18, 0],
+            }}
+            transition={{
+              duration: star.duration,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: star.delay,
+            }}
+          >
+            <Stars className="h-3.5 w-3.5 md:h-4 md:w-4" strokeWidth={1.4} />
+          </motion.span>
+        ))}
+      </div>
       {/* Filet fin type baguette moderne */}
       <div
-        className="pointer-events-none absolute inset-[6px] border border-white/50 md:inset-2"
+        className="pointer-events-none absolute inset-[6px] z-[2] border border-white/50 md:inset-2"
         aria-hidden
       />
 
@@ -64,6 +102,12 @@ export function CatalogPieceCard({ piece, indexLabel }: Props) {
             )}
 
             <div className="pointer-events-none absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.15)]" />
+            <motion.div
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(255,255,255,0.32),transparent_35%),radial-gradient(circle_at_82%_75%,rgba(190,24,93,0.22),transparent_42%)]"
+              animate={{ opacity: [0.24, 0.52, 0.24] }}
+              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+              aria-hidden
+            />
           </div>
 
           {/* Plaquette inventaire */}
