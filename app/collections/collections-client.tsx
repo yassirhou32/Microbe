@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, MoveRight, Sparkles, Star, Stars } from "lucide-react";
+import { ArrowRight, MoveRight, Star, Stars } from "lucide-react";
 import {
   catalogFallbackImage,
   type CatalogCollection,
@@ -14,9 +14,6 @@ import {
   Footer,
   Separator,
 } from "@/components/the-edit/TheEdit";
-import {
-  GalleryCornerBrackets,
-} from "@/components/collections/GalleryFrameDecor";
 
 type Props = {
   catalogCollections: CatalogCollection[];
@@ -60,7 +57,7 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
           <Navbar />
 
           <main>
-            {/* Hero — meme langage que l accueil (Hero) */}
+            {/* Hero — même langage que l'accueil (Hero) */}
             <header
               ref={heroRef}
               className="relative min-h-[100svh] overflow-hidden bg-stone-900"
@@ -119,7 +116,7 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
                       transition={{ delay: 0.35, duration: 0.6 }}
                       className="mb-6 block text-[10px] font-black uppercase tracking-[0.5em] text-white/70"
                     >
-                      / Catalogue atelier
+                   
                     </motion.span>
                     <h1 className="font-serif text-[13vw] leading-[0.78] tracking-tighter text-white md:text-[9.5vw]">
                       Collections
@@ -128,10 +125,7 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
                         Mr Microbe
                       </span>
                     </h1>
-                    <p className="mt-8 max-w-lg text-sm font-medium uppercase leading-relaxed tracking-[0.18em] text-stone-300 md:text-xs md:tracking-[0.2em]">
-                      Fiches techniques, supports et tirages issus du catalogue
-                      papier — lecture directe, sans artifice.
-                    </p>
+                    
                   </motion.div>
 
                   <motion.div
@@ -141,14 +135,14 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
                     className="flex flex-col gap-8 md:max-w-sm md:pb-2"
                   >
                     <p className="text-xs font-medium uppercase leading-relaxed tracking-[0.22em] text-stone-300">
-                      Toiles, resines, monocycle, grands formats, luminaire et
-                      joaillerie — memes codes visuels que sur l accueil et la page
+                      Toiles, résines, monocycle, grands formats, luminaire et
+                      joaillerie — mêmes codes visuels que sur l'accueil et la page
                       Artiste.
                     </p>
                     <div className="flex flex-wrap items-center gap-4">
                       <div className="rounded-sm border border-white/25 bg-white/10 px-5 py-3 backdrop-blur-md">
                         <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/60">
-                          References
+                          Références
                         </p>
                         <p className="mt-1 font-serif text-3xl tabular-nums text-white">
                           {totalPieces}
@@ -165,9 +159,9 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
                     </div>
                     <Link
                       href="/artiste"
-                      className="group inline-flex w-fit items-center gap-3 border-2 border-[var(--brand-primary)] bg-[var(--brand-primary)] px-7 py-3.5 text-[10px] font-black uppercase tracking-[0.32em] text-white shadow-lg shadow-black/25 transition hover:bg-[var(--brand-primary-dark)] hover:border-[var(--brand-primary-dark)]"
+                      className="group inline-flex w-fit items-center gap-3 rounded-full border-2 border-[var(--brand-primary)] bg-[var(--brand-primary)] px-7 py-3.5 text-[10px] font-black uppercase tracking-[0.32em] text-white shadow-lg shadow-black/25 transition hover:bg-[var(--brand-primary-dark)] hover:border-[var(--brand-primary-dark)]"
                     >
-                      L univers & l artiste
+                      L'UNIVERS & L'ARTISTE
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </motion.div>
@@ -182,37 +176,18 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
               />
             </header>
 
-            {/* Bandeau editorial — cadre mural */}
-            <section className="relative border-y border-stone-200 bg-[#ebe8e0]/50 px-6 py-20 md:px-20 md:py-28">
-              <div className="mx-auto max-w-7xl">
-                <div className="relative bg-[#f5f2ec] p-8 shadow-[0_0_0_1px_rgba(28,25,23,0.11),0_0_0_7px_#fff,0_0_0_8px_rgba(28,25,23,0.14),0_26px_52px_-22px_rgba(28,25,23,0.18)] md:p-14">
-                  <div
-                    className="pointer-events-none absolute inset-3 ring-1 ring-stone-900/10 md:inset-5"
-                    aria-hidden
-                  />
-                  <GalleryCornerBrackets />
-                  <div className="relative z-10 flex flex-col gap-10 md:flex-row md:items-center md:justify-between">
-                    <div className="max-w-3xl">
-                      <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[var(--brand-primary-dark)]">
-                        Note d atelier
-                      </span>
-                      <p className="mt-6 font-serif text-3xl font-medium leading-[1.2] tracking-tight text-stone-900 md:text-4xl md:leading-[1.15]">
-                        Chaque fiche reprend support, dimensions et tirage tels que
-                        presentes dans l edition — pour une lecture claire, comme
-                        sur un mur de galerie: cadre, etiquette, fiche technique.
-                      </p>
-                    </div>
-                    <Sparkles
-                      className="hidden h-14 w-14 shrink-0 text-stone-400 md:block"
-                      strokeWidth={1}
-                    />
-                  </div>
-                </div>
-              </div>
-            </section>
-
             <section className="relative border-b border-stone-300/70 bg-[#f3eee4] px-6 py-14 md:px-20 md:py-16">
-              <div className="mx-auto grid w-full max-w-7xl gap-8 md:grid-cols-[1.15fr_1fr] md:gap-10">
+              <div className="mx-auto w-full max-w-7xl">
+                <div className="mb-8 md:mb-10">
+                  <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[var(--brand-primary-dark)]">
+                    Laboratoire couleur
+                  </span>
+                  <h2 className="mt-3 font-serif text-4xl leading-[1.05] tracking-tight text-stone-900 md:text-5xl">
+                    Microbe interactif.
+                  </h2>
+                </div>
+
+                <div className="grid gap-8 md:grid-cols-[1.15fr_1fr] md:gap-10">
                 <motion.div
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -292,15 +267,13 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
                   transition={{ duration: 0.68, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
                   className="border border-stone-900/20 bg-white/75 p-5 md:p-7"
                 >
-                  <p className="text-[10px] font-black uppercase tracking-[0.33em] text-[#9d1746]">
-                    Configuration client
-                  </p>
+                  
                   <h2 className="mt-3 font-serif text-3xl font-medium tracking-tight text-stone-900 md:text-4xl">
                     Choisir la couleur du microbe
                   </h2>
                   <p className="mt-3 text-sm leading-relaxed text-stone-600">
                     Glissez pour changer la couleur en direct. Le rendu applique une teinte
-                    instantanee sur le microbe pour visualiser le choix final.
+                    instantanée sur le microbe pour visualiser le choix final.
                   </p>
 
                   <div className="mt-6">
@@ -310,11 +283,15 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
                       max={360}
                       value={microbeHue}
                       onChange={(event) => setMicrobeHue(Number(event.target.value))}
-                      className="h-2 w-full cursor-pointer appearance-none rounded-full bg-[conic-gradient(from_0deg,_#ef4444,_#f59e0b,_#eab308,_#22c55e,_#06b6d4,_#3b82f6,_#8b5cf6,_#ec4899,_#ef4444)]"
-                      aria-label="Reglage de teinte microbe"
+                      className="microbe-hue-slider h-2 w-full cursor-pointer appearance-none rounded-full border-0 bg-transparent"
+                      style={{
+                        background:
+                          "linear-gradient(90deg,#ef4444 0%,#f59e0b 14%,#eab308 28%,#22c55e 42%,#06b6d4 56%,#3b82f6 70%,#8b5cf6 84%,#ec4899 100%)",
+                      }}
+                      aria-label="Réglage de teinte microbe"
                     />
                     <p className="mt-2 text-xs font-semibold uppercase tracking-[0.22em] text-stone-500">
-                      Teinte: {microbeHue}deg
+                      Teinte : {microbeHue}deg
                     </p>
                   </div>
 
@@ -343,6 +320,7 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
                     ))}
                   </div>
                 </motion.div>
+                </div>
               </div>
             </section>
 
@@ -413,8 +391,8 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
                           {collection.description}
                         </p>
                         <p className="relative mt-2 text-[10px] font-black uppercase tracking-[0.28em] text-[var(--brand-primary-dark)]">
-                          {collection.pieces.length} piece
-                          {collection.pieces.length > 1 ? "s" : ""} cataloguee
+                          {collection.pieces.length} pièce
+                          {collection.pieces.length > 1 ? "s" : ""} cataloguée
                           {collection.pieces.length > 1 ? "s" : ""}
                         </p>
                       </div>
@@ -637,9 +615,7 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
                                 aria-hidden
                               />
                               <div className="relative z-[2]">
-                                <p className="text-[10px] font-black uppercase tracking-[0.33em] text-[#9d1746]">
-                                  Petite description
-                                </p>
+                               
                                 <h3 className="mt-3 font-serif text-3xl font-medium leading-[0.98] tracking-tight text-stone-900 md:text-5xl">
                                   {piece.title}
                                 </h3>
@@ -678,6 +654,63 @@ export function CollectionsPageClient({ catalogCollections }: Props) {
           <Footer />
         </div>
       </div>
+      <style jsx global>{`
+        .microbe-hue-slider {
+          -webkit-appearance: none;
+          appearance: none;
+          height: 8px;
+          border-radius: 9999px;
+        }
+        .microbe-hue-slider::-webkit-slider-runnable-track {
+          height: 8px;
+          border-radius: 9999px;
+          background: linear-gradient(
+            90deg,
+            #ef4444 0%,
+            #f59e0b 14%,
+            #eab308 28%,
+            #22c55e 42%,
+            #06b6d4 56%,
+            #3b82f6 70%,
+            #8b5cf6 84%,
+            #ec4899 100%
+          );
+        }
+        .microbe-hue-slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          margin-top: -4px;
+          height: 16px;
+          width: 16px;
+          border-radius: 9999px;
+          border: 2px solid rgba(255, 255, 255, 0.95);
+          background: #9d5c0f;
+          box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+        }
+        .microbe-hue-slider::-moz-range-track {
+          height: 8px;
+          border-radius: 9999px;
+          background: linear-gradient(
+            90deg,
+            #ef4444 0%,
+            #f59e0b 14%,
+            #eab308 28%,
+            #22c55e 42%,
+            #06b6d4 56%,
+            #3b82f6 70%,
+            #8b5cf6 84%,
+            #ec4899 100%
+          );
+        }
+        .microbe-hue-slider::-moz-range-thumb {
+          height: 16px;
+          width: 16px;
+          border-radius: 9999px;
+          border: 2px solid rgba(255, 255, 255, 0.95);
+          background: #9d5c0f;
+          box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+        }
+      `}</style>
     </SmoothScroll>
   );
 }

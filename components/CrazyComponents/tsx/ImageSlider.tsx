@@ -145,10 +145,6 @@ export default function ImageSlider({
     <div
       className={`relative h-screen w-full overflow-hidden bg-[#0a0a0a] font-sans text-white ${className}`}
     >
-      <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,400&display=swap");
-      `}</style>
-
       <div
         className={`fixed inset-0 z-[100] flex items-center justify-center bg-black transition-opacity duration-1000 ${loading ? "opacity-100" : "pointer-events-none opacity-0"}`}
       >
@@ -177,14 +173,12 @@ export default function ImageSlider({
         <div className="relative z-20 max-w-5xl">
           <div className="mb-6 flex items-center gap-4">
             <span className="h-px w-10 bg-white/40" />
-            <span className="text-[10px] uppercase tracking-[0.5em] text-white/50">
-              Exclusive Species
-            </span>
+            
           </div>
 
           <h1
             ref={titleRef}
-            className="mb-10 font-[Playfair_Display] text-6xl leading-[0.8] italic md:text-8xl lg:text-[10rem]"
+            className="mb-10 font-sans text-6xl leading-[0.8] italic md:text-8xl lg:text-[10rem]"
             dangerouslySetInnerHTML={{ __html: slides[displayTextIndex]?.title || "" }}
           />
 

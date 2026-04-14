@@ -1,15 +1,5 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: 'Playfair Display';
-  src: url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
-}
-
-@font-face {
-  font-family: 'Inter';
-  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-}
-
 @theme {
   --brand-primary: #bc4077;
   --brand-primary-dark: #9b2f60;
@@ -30,11 +20,12 @@
   --color-input: #f0ccd9;
   --color-ring: var(--brand-primary-dark);
   --radius: 0.5rem;
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Playfair Display', serif;
+  --font-sans: 'Space Grotesk', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
 }
 
 html {
+  font-size: clamp(16.5px, 0.2vw + 16px, 18px);
   scroll-behavior: smooth;
   /* Framer Motion useScroll (target !== container) exige un conteneur non-static (defaut: documentElement) */
   position: relative;

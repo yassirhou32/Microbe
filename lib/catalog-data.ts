@@ -37,7 +37,12 @@ export type CatalogCollectionDraft = Omit<CatalogCollection, "pieces"> & {
 
 /** Cinq visuels dans public/images/ — reutilises en rotation (repetition ok). */
 export const collectionImagePaths = [
-  "/icon.svg",
+  "/images/M7_02134.jpg",
+  "/images/M7_02104.jpg",
+  "/images/M7_01636.jpg",
+  "/images/M7_03109.jpg",
+  "/images/M7_03110.jpg",
+  "/images/DSC08913.jpg",
 ] as const;
 
 function withRotatingCollectionImages(
@@ -339,4 +344,4 @@ export const catalogCollections = buildCatalogWithImages(collectionImagePaths);
 
 /** Si un fichier manque dans public/images/, le composant peut basculer sur cette image. */
 export const catalogFallbackImage =
-  "/icon.svg";
+  "/images/M7_02134.jpg";

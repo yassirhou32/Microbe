@@ -7,7 +7,6 @@ import {
     useScroll,
     useTransform,
     useSpring,
-    useMotionValueEvent,
     AnimatePresence,
 } from "framer-motion";
 import Lenis from "lenis";
@@ -79,25 +78,11 @@ export function Separator({ color = "bg-stone-900" }: { color?: string }) {
 
 // 3. Navigation
 export function Navbar() {
-    const [hidden, setHidden] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const { scrollY } = useScroll();
-
-    useMotionValueEvent(scrollY, "change", (latest) => {
-        const previous = scrollY.getPrevious() || 0;
-        if (latest > previous && latest > 150) setHidden(true);
-        else setHidden(false);
-    });
 
     return (
         <motion.nav
-            variants={{
-                visible: { y: 0 },
-                hidden: { y: "-100%" }
-            }}
-            animate={hidden ? "hidden" : "visible"}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-            className="fixed top-0 left-0 w-full z-50 border-b border-[var(--brand-primary)]/35 bg-[var(--brand-primary-soft)]/90 px-4 py-4 text-stone-900 backdrop-blur-md md:px-6 md:py-5"
+            className="fixed top-0 left-0 w-full z-50 bg-[var(--brand-primary-soft)]/90 px-4 py-4 text-stone-900 backdrop-blur-md md:px-6 md:py-5"
         >
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 md:flex-row md:items-center">
                 <div className="flex items-center justify-between">
@@ -204,16 +189,14 @@ export function Hero() {
                                 transition={{ delay: 1 }}
                                 className="mb-6 block text-[10px] font-black uppercase tracking-[0.5em] text-white/70"
                             >
-                                / Collection Signature 01
+                               
                             </motion.span>
                             <h1 className="font-serif text-[18vw] md:text-[14vw] leading-[0.75] text-white tracking-tighter">
                                 Mr <br />
                                 <span className="italic font-extralight opacity-80 pl-[10vw]">Microbe</span>
                             </h1>
                         </div>
-                        <div className="max-w-xs text-stone-300 text-xs font-medium leading-relaxed uppercase tracking-[0.2em] mb-4">
-                            Quand l invisible devient inoubliable. Des pieces uniques nees de l angoisse transformee en puissance creative.
-                        </div>
+                       
                     </motion.div>
                 </div>
             </div>
@@ -293,42 +276,40 @@ export function SpotlightGrid() {
             <div className="max-w-7xl mx-auto">
                 <div className="mb-24 flex items-end justify-between border-b border-[var(--brand-primary-dark)]/60 pb-12">
                     <div>
-                        <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[var(--brand-primary)]">Section 03</span>
-                        <h2 className="font-serif text-6xl mt-4">Oeuvres <br />phares.</h2>
+                        
+                        <h2 className="font-serif text-6xl mt-4">Œuvres <br />phares.</h2>
                     </div>
                     <MoveRight className="w-12 h-12 stroke-1 text-stone-300 translate-y-[-10px]" />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 h-[1200px] md:h-[800px]">
                     <div className="md:col-span-2 group relative overflow-hidden bg-stone-100 rounded-sm border border-[var(--brand-primary)]/25 shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
-                        <ParallaxImage src="/images/DSC00575.jpg" alt="Nature" fit="contain" scale={1} disableParallax />
+                        <ParallaxImage src="/images/M7_02134.jpg" alt="Nature" fit="cover" scale={1} disableParallax />
                         <div className="absolute bottom-8 left-8 text-white z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                             <span className="text-[10px] font-bold uppercase tracking-widest">Emotion</span>
-                            <h3 className="text-3xl font-serif">Energie organique</h3>
+                            <h3 className="text-3xl font-serif">Énergie organique</h3>
                         </div>
                         <div className="absolute top-5 right-5 z-20 border border-white/30 bg-black/35 px-3 py-1 text-[9px] font-black uppercase tracking-[0.26em] text-white/80 backdrop-blur-sm">01</div>
                     </div>
                     <div className="md:col-span-1 group relative overflow-hidden bg-stone-100 rounded-sm border border-[var(--brand-primary)]/25 shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
-                        <ParallaxImage src="/images/DSC08913.jpg" alt="Object" fit="contain" scale={1} disableParallax />
+                        <ParallaxImage src="/images/DSC08913.jpg" alt="Object" fit="cover" scale={1} disableParallax />
                         <div className="absolute bottom-8 left-8 text-white z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-[10px] font-bold uppercase tracking-widest">Matiere</span>
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Matière</span>
                             <h3 className="text-2xl font-serif">Forme vivante</h3>
                         </div>
                     </div>
                     <div className="md:col-span-1 md:row-span-2 group relative overflow-hidden bg-stone-100 rounded-sm border border-[var(--brand-primary)]/25 shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
-                        <ParallaxImage src="/images/M7_01625.jpg" alt="Model" fit="contain" scale={1} disableParallax />
+                        <ParallaxImage src="/images/M7_01625.jpg" alt="Model" fit="cover" scale={1} disableParallax />
                     </div>
                     <div className="md:col-span-1 group relative overflow-hidden bg-stone-100 rounded-sm">
                         <div className="p-12 flex flex-col justify-between h-full bg-[var(--brand-primary-dark)] text-white">
-                            <Sparkles className="w-8 h-8 text-[var(--brand-primary-soft)]" />
                             <p className="font-serif text-xl italic leading-relaxed opacity-80">
-                                "Chaque oeuvre raconte un passage de l ombre a la lumiere."
+                                "Chaque œuvre raconte un passage de l'ombre à la lumière."
                             </p>
-                            <span className="text-[10px] font-black uppercase tracking-widest">Note d atelier</span>
                         </div>
                     </div>
                     <div className="md:col-span-2 group relative overflow-hidden bg-stone-100 rounded-sm border border-[var(--brand-primary)]/25 shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
-                        <ParallaxImage src="/images/M7_01636.jpg" alt="Interior" fit="contain" scale={1} disableParallax />
+                        <ParallaxImage src="/images/Capture d’écran 2026-03-30 192741.png" alt="Interior" fit="cover" scale={1} disableParallax />
                     </div>
                 </div>
             </div>
@@ -340,27 +321,27 @@ export function SpotlightGrid() {
 export function Lookbook() {
     const slides = [
         {
-            title: "Collection <br/>01",
-            status: "Oeuvre Signature",
+            title: "Collection 01",
+            status: "Œuvre Signature",
             image: "/images/C5456.00_00_29_18.Still001.jpg",
         },
         {
-            title: "Collection <br/>02",
-            status: "Matiere Vivante",
+            title: "Collection 02",
+            status: "Matière Vivante",
             image: "/images/DSC08913.jpg",
         },
         {
-            title: "Collection <br/>03",
+            title: "Collection 03",
             status: "Composition Organique",
             image: "/images/M7_03109.jpg",
         },
         {
-            title: "Collection <br/>04",
+            title: "Collection 04",
             status: "Ligne Interieure",
             image: "/images/M7_03110.jpg",
         },
         {
-            title: "Collection <br/>05",
+            title: "Collection 05",
             status: "Impact Visuel",
             image: "/images/M7_02134.jpg",
         },
@@ -372,6 +353,7 @@ export function Lookbook() {
                 slides={slides}
                 autoPlay={true}
                 interval={3000}
+                className="h-[calc(125vh+110px)] md:h-[calc(125vh+110px)]"
                 accentColor="#bc4077"
                 showPagination={true}
             />
@@ -384,8 +366,8 @@ export function TheDialogue() {
     const [open, setOpen] = useState(0);
 
     const qa = [
-        { q: "Comment definir l univers Mr Microbe ?", a: "Mr Microbe transforme l angoisse en energie creative. Chaque piece cherche l equilibre entre instinct, couleur et matiere." },
-        { q: "Comment choisir une oeuvre pour son espace ?", a: "Nous orientons selon la lumiere, le format, l ambiance recherchee et votre budget pour trouver la piece juste." },
+        { q: "Comment définir l'univers Mr Microbe ?", a: "Mr Microbe transforme l'angoisse en énergie créative. Chaque pièce cherche l'équilibre entre instinct, couleur et matière." },
+        { q: "Comment choisir une œuvre pour son espace ?", a: "Nous orientons selon la lumière, le format, l'ambiance recherchée et votre budget pour trouver la pièce juste." },
         { q: "Pourquoi ces formes organiques ?", a: "Ces formes incarnent l invisible: emotions, tensions et pulsations interieures deviennent visibles sur la toile." }
     ];
     const active = qa[open] ?? qa[0];
@@ -435,39 +417,91 @@ export function TheDialogue() {
 
 // 9. Editorial Footer
 export function Footer() {
+    const [faqActive, setFaqActive] = useState(0);
+
     return (
         <footer className="bg-stone-900 text-stone-200 px-6 py-32 md:px-20 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-[1px] bg-stone-700" />
 
             <div className="max-w-7xl mx-auto relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24 mb-32">
-                    <div className="flex flex-col gap-12">
-                        <h2 className="font-serif text-[8vw] md:text-[5vw] leading-none mb-4 italic">Prochaine <br />Expo.</h2>
-                        <div className="flex flex-col gap-4 text-sm font-black uppercase tracking-[0.4em] opacity-40">
-                          
-                            <span>Theme : Microbe Pop</span>
-                            <span>Artiste : Maxime Furgerot</span>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col gap-16">
+                <div className="mb-32 grid grid-cols-1 gap-24">
+                    <div className="flex w-full flex-col gap-16">
                         <div className="flex flex-col gap-6">
                             <span className="text-[10px] font-black uppercase tracking-[0.5em] text-stone-500">Navigation</span>
-                            <nav className="flex flex-col gap-4 font-serif text-2xl">
-                                <a href="/" className="hover:italic hover:translate-x-2 transition-all">Accueil</a>
-                                <a href="/collections" className="hover:italic hover:translate-x-2 transition-all">Collections</a>
-                                <a href="/artiste" className="hover:italic hover:translate-x-2 transition-all">Artiste</a>
-                                <a href="/immersion" className="hover:italic hover:translate-x-2 transition-all">Immersion</a>
-                                <a href="/contact" className="hover:italic hover:translate-x-2 transition-all">Contact</a>
+                            <nav className="flex w-full max-w-5xl flex-col gap-2 font-serif text-4xl leading-tight md:text-5xl">
+                                <a href="/" className="w-full border-b border-white/10 pb-2 transition-all hover:italic hover:translate-x-1">Accueil</a>
+                                <a href="/collections" className="w-full border-b border-white/10 pb-2 transition-all hover:italic hover:translate-x-1">Collections</a>
+                                <a href="/artiste" className="w-full border-b border-white/10 pb-2 transition-all hover:italic hover:translate-x-1">Artiste</a>
+                                <a href="/immersion" className="w-full border-b border-white/10 pb-2 transition-all hover:italic hover:translate-x-1">Immersion</a>
+                                <a href="/contact" className="w-full border-b border-white/10 pb-2 transition-all hover:italic hover:translate-x-1">Contact</a>
                             </nav>
                         </div>
                     </div>
-
-       
                 </div>
 
+                <section className="mb-24 border border-white/10 bg-white/[0.02] p-5 md:p-8">
+                    <div className="mb-8 flex items-end justify-between gap-5">
+                        <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[var(--brand-primary-soft)]">
+                            Questions fréquentes
+                        </span>
+                        <div className="hidden items-center gap-2 md:flex">
+                            {[0, 1, 2].map((i) => (
+                                <button
+                                    key={i}
+                                    type="button"
+                                    onClick={() => setFaqActive(i)}
+                                    className={`h-2.5 w-2.5 rounded-full transition ${faqActive === i ? "scale-110 bg-[var(--brand-primary)]" : "bg-[var(--brand-primary)]/30"}`}
+                                    aria-label={`FAQ ${i + 1}`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        {[
+                            ["Comment choisir la bonne collection ?", "On lit le lieu, puis on propose court, clair, précis."],
+                            ["Peut-on commander une pièce unique ?", "Oui. Brief, format, mood, puis exécution sur mesure."],
+                            ["Aidez-vous pour l'accrochage ?", "Oui. Placement, hauteur, respiration, composition finale."],
+                        ].map(([q, a], i) => (
+                            <article
+                                key={q}
+                                onMouseEnter={() => setFaqActive(i)}
+                                onClick={() => setFaqActive(i)}
+                                className={cn(
+                                    "group relative cursor-pointer overflow-hidden border p-5 transition-all duration-300 md:p-6",
+                                    faqActive === i
+                                        ? "border-[var(--brand-primary)]/55 bg-white/95 text-stone-900 shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)]"
+                                        : "border-white/15 bg-white/[0.04] text-stone-100"
+                                )}
+                            >
+                                <div className="relative flex items-start justify-between gap-4">
+                                    <h3 className="font-serif text-2xl leading-tight md:text-3xl">{q}</h3>
+                                    <span
+                                        className={cn(
+                                            "mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border text-xs font-black transition",
+                                            faqActive === i
+                                                ? "border-[var(--brand-primary)] text-[var(--brand-primary-dark)]"
+                                                : "border-white/25 text-white/70"
+                                        )}
+                                    >
+                                        {faqActive === i ? "−" : "+"}
+                                    </span>
+                                </div>
+                                <p
+                                    className={cn(
+                                        "relative mt-3 text-sm leading-relaxed md:text-base",
+                                        faqActive === i ? "opacity-95" : "opacity-70"
+                                    )}
+                                >
+                                    {a}
+                                </p>
+                            </article>
+                        ))}
+                    </div>
+                </section>
+
                 <div className="pt-24 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12">
-                    <div className="font-serif text-4xl font-black">EDIT.</div>
+                   
                     <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 text-[10px] font-black uppercase tracking-[0.35em] text-stone-500">
                         <a
                             href="https://www.instagram.com/mrmicrobe.art/"
@@ -501,9 +535,6 @@ export function Footer() {
                 </div>
             </div>
 
-            <div className="absolute -bottom-20 -right-20 opacity-5 pointer-events-none select-none">
-                <span className="text-[40vw] font-serif font-black leading-none">TE</span>
-            </div>
         </footer>
     )
 }
@@ -529,7 +560,13 @@ export function ParallaxImage({
     const y = useTransform(scrollYProgress, [0, 1], [`-${speed * 100}%`, `${speed * 100}%`]);
 
     return (
-        <div ref={ref} className="group h-full w-full overflow-hidden relative bg-stone-900">
+        <div
+            ref={ref}
+            className={cn(
+                "group relative h-full w-full overflow-hidden",
+                fit === "contain" ? "bg-transparent" : "bg-stone-900"
+            )}
+        >
             {fit === "contain" && (
                 <>
                     <div
@@ -538,7 +575,7 @@ export function ParallaxImage({
                     />
                     <div
                         aria-hidden
-                        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(100%_80%_at_50%_100%,rgba(0,0,0,0.22),rgba(0,0,0,0))] transition-opacity duration-700 group-hover:opacity-90"
+                        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(100%_80%_at_50%_100%,rgba(188,64,119,0.1),rgba(255,255,255,0))] transition-opacity duration-700 group-hover:opacity-90"
                     />
                     <div
                         aria-hidden
@@ -568,7 +605,12 @@ export function ParallaxImage({
             )}
             <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0)_45%,rgba(0,0,0,0.2)_100%)]"
+                className={cn(
+                    "pointer-events-none absolute inset-0 z-10",
+                    fit === "contain"
+                        ? "bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0)_55%,rgba(188,64,119,0.08)_100%)]"
+                        : "bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0)_45%,rgba(0,0,0,0.2)_100%)]"
+                )}
             />
             <motion.img
                 style={{ y: disableParallax ? "0%" : y, scale }}
