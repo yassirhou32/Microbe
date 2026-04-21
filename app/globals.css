@@ -4,7 +4,7 @@
   --brand-primary: #bc4077;
   --brand-primary-dark: #9b2f60;
   --brand-primary-soft: #f4d7e3;
-  --color-background: var(--brand-primary-soft);
+  --color-background: #ffffff;
   --color-foreground: #1a1a1a;
   --color-card: #ffffff;
   --color-card-foreground: #1a1a1a;
@@ -20,8 +20,8 @@
   --color-input: #f0ccd9;
   --color-ring: var(--brand-primary-dark);
   --radius: 0.5rem;
-  --font-sans: 'Space Grotesk', system-ui, sans-serif;
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-display: var(--font-editorial), "Times New Roman", serif;
 }
 
 html {
@@ -32,9 +32,34 @@ html {
 }
 
 body {
-  background-color: var(--color-background);
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
   color: var(--color-foreground);
   font-family: var(--font-sans);
+  background-image: none;
+  background-attachment: scroll;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  background-image: none;
+  animation: none;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: none;
+  animation: none;
 }
 
 ::selection {
@@ -44,6 +69,17 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+/* Ne pas cibler `nav` ici : en dehors de @layer, cela écrase `position: fixed`
+   de la barre du site (Tailwind en @layer utilities). */
+main,
+header,
+section,
+footer {
+  position: relative;
+  z-index: 1;
 }
 
 ::-webkit-scrollbar {
@@ -51,14 +87,35 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: var(--color-background);
+  background-color: #f3f4f6;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-muted);
+  background-color: #cbd5e1;
   border-radius: 0.5rem;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-muted-foreground);
+  background-color: #94a3b8;
+}
+
+@keyframes gridFloat {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-36px, -36px, 0);
+  }
+}
+
+@keyframes auraPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.04);
+  }
 }

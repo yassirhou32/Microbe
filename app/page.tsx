@@ -1,397 +1,542 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import {
-  SmoothScroll,
-  Navbar,
-  Hero,
-  SpotlightGrid,
-  Lookbook,
-  Footer,
-} from "@/components/the-edit/TheEdit";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
+import { SmoothScroll, Navbar, Footer } from "@/components/the-edit/TheEdit";
 
-export default function Home() {
-  const microSignals = [
-    "Direction artistique",
-    "Collections privées",
-    "Édition limitée",
-    "Accrochage sur mesure",
-    "Signature visuelle",
-  ];
-  const sectionReveal = {
-    hidden: { opacity: 0, y: 28 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  };
-  const manifestoSlides = [
-    "/images/M7_02134.jpg",
-    "/images/M7_02104.jpg",
-    "/images/M7_01636.jpg",
-    "/images/Capture d’écran 2026-03-30 190528.png",
-    "/images/Capture d’écran 2026-03-30 190452.png",
-  ];
-  const [manifestoIndex, setManifestoIndex] = useState(0);
-  const [activeJourneyStep, setActiveJourneyStep] = useState(0);
+const heroSlides = [
+  "/images/M7_02134.jpg",
+  "/images/M7_02137.jpg",
+  "/images/M7_02162.jpg",
+  "/images/M7_01627.jpg",
+  "/images/M7_01636.jpg",
+  "/images/M7_02104.jpg",
+];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setManifestoIndex((n) => (n + 1) % manifestoSlides.length);
-    }, 2600);
-    return () => clearInterval(timer);
-  }, [manifestoSlides.length]);
+const spotlightCards = [
+  {
+    title: "Collections",
+    subtitle: "Directions visuelles fortes",
+    description:
+      "Pieces signature, formats vivants, selection orientee impact et coherence d'espace.",
+    href: "/collections",
+    image: "/images/M7_02134.jpg",
+  },
+  {
+    title: "Artiste",
+    subtitle: "Langage Mr Microbe",
+    description:
+      "Un univers de matiere, tension et narration visuelle construit comme une vraie identite d'auteur.",
+    href: "/artiste",
+    image: "/images/M7_02162.jpg",
+  },
+  {
+    title: "Immersion",
+    subtitle: "Du brief au mur",
+    description:
+      "Parcours projection, selection et installation pour composer une presence artistique nette.",
+    href: "/immersion",
+    image: "/images/M7_01636.jpg",
+  },
+];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveJourneyStep((n) => (n + 1) % 4);
-    }, 1800);
-    return () => clearInterval(timer);
-  }, []);
+const processSteps = [
+  {
+    title: "Brief",
+    text: "Lecture du lieu, de la lumiere, des dimensions et de l'intention.",
+  },
+  {
+    title: "Selection",
+    text: "Proposition de pieces ou d'axes visuels adaptes a ton espace.",
+  },
+  {
+    title: "Projection",
+    text: "Validation de la direction finale, des formats et de la respiration visuelle.",
+  },
+  {
+    title: "Installation",
+    text: "Mise en scene propre, precise, et coherent avec l'architecture du lieu.",
+  },
+];
+
+const galleryImages = [
+  "/images/M7_02134.jpg",
+  "/images/M7_02137.jpg",
+  "/images/M7_02104.jpg",
+  "/images/M7_01636.jpg",
+  "/images/M7_01627.jpg",
+  "/images/M7_02162.jpg",
+];
+
+const masonryCards = [
+  { src: heroSlides[0], title: "Collection vivante", height: "h-[340px] md:h-[420px]" },
+  { src: galleryImages[2], title: "Matiere narrative", height: "h-[420px] md:h-[540px]" },
+  { src: galleryImages[1], title: "Direction visuelle", height: "h-[360px] md:h-[460px]" },
+  { src: galleryImages[3], title: "Relief et contraste", height: "h-[380px] md:h-[500px]" },
+  { src: heroSlides[2], title: "Langage artiste", height: "h-[320px] md:h-[420px]" },
+  { src: heroSlides[4], title: "Presence forte", height: "h-[430px] md:h-[560px]" },
+  { src: galleryImages[4], title: "Immersion", height: "h-[360px] md:h-[460px]" },
+  { src: galleryImages[5], title: "Signature", height: "h-[410px] md:h-[520px]" },
+  { src: heroSlides[1], title: "Atelier vivant", height: "h-[340px] md:h-[430px]" },
+];
+
+const columns = [masonryCards.slice(0, 3), masonryCards.slice(3, 6), masonryCards.slice(6, 9)];
+
+function MagneticButton({ children }: { children: React.ReactNode }) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
 
   return (
-    <SmoothScroll>
-      <div className="min-h-screen bg-[var(--brand-primary-soft)] text-stone-900 overflow-x-hidden">
-        <Navbar />
+    <motion.button
+      ref={ref}
+      onMouseMove={(e) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        x.set((e.clientX - cx) * 0.18);
+        y.set((e.clientY - cy) * 0.18);
+      }}
+      onMouseLeave={() => {
+        x.set(0);
+        y.set(0);
+      }}
+      style={{ x, y }}
+      className="inline-flex items-center justify-center rounded-full border border-white/30 px-7 py-3 text-[10px] font-black uppercase tracking-[0.24em] text-white transition hover:border-white/65 hover:bg-white/10"
+    >
+      {children}
+    </motion.button>
+  );
+}
 
-        <main>
-          <Hero />
-
-          <motion.section
-            variants={sectionReveal}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-60px" }}
-            className="relative overflow-hidden border-y border-[var(--brand-primary)]/30 bg-stone-950 px-6 py-20 text-white md:px-20 md:py-24"
-          >
-            <div className="pointer-events-none absolute -left-20 top-10 h-64 w-64 rounded-full bg-[var(--brand-primary)]/30 blur-3xl" />
-            <div className="pointer-events-none absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-fuchsia-400/20 blur-3xl" />
-            <motion.div
-              animate={{ opacity: [0.18, 0.32, 0.18] }}
-              transition={{ duration: 4.5, repeat: Infinity }}
-              className="pointer-events-none absolute inset-0 [background-image:linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:34px_34px]"
-            />
-            <div className="mx-auto max-w-7xl">
+function HomeHero({
+  heroIndex,
+  setHeroIndex,
+}: {
+  heroIndex: number;
+  setHeroIndex: React.Dispatch<React.SetStateAction<number>>;
+}) {
+  return (
+    <section className="relative flex min-h-[88svh] flex-col justify-end overflow-hidden px-5 pb-10 pt-28 md:px-10 md:pb-14 md:pt-32">
+      {heroSlides.map((slide, i) => (
+        <motion.img
+          key={slide}
+          src={slide}
+          alt="Hero visuel Mr Microbe"
+          initial={false}
+          animate={{ opacity: i === heroIndex ? 1 : 0, scale: i === heroIndex ? 1 : 1.02 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      ))}
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.22)_0%,rgba(0,0,0,0.6)_70%,rgba(0,0,0,0.84)_100%)]" />
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9 }}
+        className="relative z-10"
+      >
+        <p className="text-[10px] font-black uppercase tracking-[0.42em] text-white/80">Mr Microbe Studio</p>
+        <h1 className="mt-4 font-serif text-[clamp(3.4rem,10vw,10rem)] leading-[0.84] text-white">
+          Une presence
+          <br />
+          <span className="text-white/72">artistique forte.</span>
+        </h1>
+        <div className="mt-8 flex w-full items-end justify-between border-b border-white/25 pb-7">
+          <p className="max-w-md text-sm uppercase leading-relaxed tracking-[0.18em] text-white/68">
+            Collections, immersion, direction visuelle: un site plus impactant, plus vivant, plus assume.
+          </p>
+          <div className="hidden md:block">
+            <div className="h-20 w-20 rounded-full border border-dashed border-white/30 p-2">
               <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.55 }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                className="h-full w-full rounded-full border border-white/20"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            href="/collections"
+            className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/10 px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-white transition hover:bg-white hover:text-black"
+          >
+            Explorer
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--brand-primary)] bg-[var(--brand-primary)] px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] text-white transition hover:bg-[var(--brand-primary-dark)]"
+          >
+            Contact studio
+          </Link>
+        </div>
+        <div className="mt-6 flex gap-2">
+          {heroSlides.map((_, i) => (
+            <button
+              key={`hero-dot-${i}`}
+              type="button"
+              onClick={() => setHeroIndex(i)}
+              className={`h-2.5 rounded-full transition ${i === heroIndex ? "w-8 bg-white" : "w-2.5 bg-white/45"}`}
+              aria-label={`hero-slide-${i + 1}`}
+            />
+          ))}
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+function MasonrySection() {
+  const container = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: container, offset: ["start end", "end start"] });
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -140]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -260]);
+  const y3 = useTransform(scrollYProgress, [0, 1], [0, -120]);
+
+  return (
+    <section ref={container} className="bg-[#050505] px-4 pb-20 pt-16 md:px-8 md:pt-20">
+      <div className="mb-10 flex items-end justify-between border-b border-white/15 pb-6">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.34em] text-white/56">Sections clefs</p>
+          <h2 className="mt-3 font-serif text-5xl leading-[0.9] text-white md:text-6xl">Home ultra design.</h2>
+        </div>
+        <Link href="/collections" className="hidden items-center gap-2 text-[10px] uppercase tracking-[0.24em] text-white/70 md:inline-flex">
+          Decouvrir
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+      <div className="flex flex-col gap-6 md:flex-row md:gap-8">
+        {[y1, y2, y3].map((y, colIndex) => (
+          <motion.div key={`column-${colIndex}`} style={{ y }} className="flex w-full flex-col gap-6 md:w-1/3">
+            <div className="border-b border-white/20 pb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/45">
+              0{colIndex + 1} - {spotlightCards[colIndex]?.title ?? "Studio"}
+            </div>
+            {columns[colIndex].map((item, i) => (
+              <motion.article
+                key={`${item.src}-${i}`}
+                initial={{ opacity: 0, scale: 0.92 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.8, delay: i * 0.08 }}
+                className={`group relative overflow-hidden ${item.height}`}
               >
-                <h2 className="font-serif text-5xl leading-[0.95] tracking-tight md:text-7xl">
-                  Une home plus
-                  <br />
-                  <span className="italic text-[var(--brand-primary-soft)]">Premium. Plus vivante.</span>
-                </h2>
-                <p className="mt-6 max-w-2xl text-sm tracking-[0.08em] text-white/70">
-                  Direction artistique, impact visuel, mouvement éditorial.
-                </p>
-              </motion.div>
-            </div>
-          </motion.section>
-
-          <motion.section
-            variants={sectionReveal}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-60px" }}
-            className="relative overflow-hidden border-y border-[var(--brand-primary)]/35 bg-black px-6 py-20 text-white md:px-20"
-          >
-            <div className="pointer-events-none absolute -left-24 top-8 h-64 w-64 rounded-full bg-[var(--brand-primary)]/28 blur-3xl" />
-            <div className="pointer-events-none absolute -right-24 bottom-8 h-64 w-64 rounded-full bg-fuchsia-400/25 blur-3xl" />
-            <div className="mx-auto max-w-7xl">
-              <div className="mb-10 flex items-end justify-between gap-4">
-                <div>
-                  <span className="text-[10px] font-black tracking-[0.28em] text-[var(--brand-primary-soft)]">
-                    Galerie atelier
-                  </span>
-                  <h2 className="mt-4 font-serif text-5xl leading-[0.95] md:text-6xl">
-                    Vision en mouvement.
-                  </h2>
-                </div>
-                <div className="hidden items-center gap-2 md:flex">
-                  {manifestoSlides.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setManifestoIndex(i)}
-                      className={`h-2.5 w-2.5 rounded-full transition ${
-                        i === manifestoIndex
-                          ? "scale-110 bg-[var(--brand-primary)]"
-                          : "bg-white/35"
-                      }`}
-                      aria-label={`Slide ${i + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="relative h-[62vh] overflow-hidden border border-white/20 bg-white/5 md:h-[70vh]">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={manifestoSlides[manifestoIndex]}
-                    src={manifestoSlides[manifestoIndex]}
-                    alt="Galerie Mr Microbe"
-                    initial={{ opacity: 0, scale: 1.06 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.04 }}
-                    transition={{ duration: 0.9, ease: "easeOut" }}
-                    className="h-full w-full object-cover"
-                  />
-                </AnimatePresence>
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-black/20" />
-              </div>
-            </div>
-          </motion.section>
-
-          <motion.section
-            variants={sectionReveal}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-60px" }}
-            className="relative overflow-hidden border-y border-[var(--brand-primary)]/40 bg-stone-950 px-6 py-28 text-white md:px-20 md:py-32"
-          >
-            <motion.div
-              animate={{ x: ["-8%", "8%", "-8%"] }}
-              transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-              className="pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-[radial-gradient(70%_60%_at_50%_50%,rgba(188,64,119,0.2),rgba(0,0,0,0))]"
-            />
-            <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(to_right,rgba(255,255,255,0.09)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.09)_1px,transparent_1px)] [background-size:42px_42px]" />
-            <motion.div
-              animate={{ opacity: [0.22, 0.45, 0.22] }}
-              transition={{ duration: 3.6, repeat: Infinity }}
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_70%_at_30%_20%,rgba(188,64,119,0.18),rgba(0,0,0,0))]"
-            />
-            <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-[1.15fr_0.85fr] md:items-center">
-              <div className="max-w-3xl">
-                
-                <h2 className="mt-5 font-serif text-6xl leading-[0.93] tracking-tight md:text-8xl">
-                  Plus qu'une œuvre.
-                  <br />
-                  <span className="italic text-[var(--brand-primary-soft)]">Une présence.</span>
-                </h2>
-                <p className="mt-6 max-w-2xl text-[13px] tracking-[0.08em] text-white/72">
-                  Chaque pièce est pensée pour frapper juste : volume, lumière,
-                  impact.
-                </p>
-                <div className="mt-6 flex flex-wrap gap-2.5">
-                  {microSignals.map((s, i) => (
-                    <motion.span
-                      key={s}
-                      initial={{ opacity: 0, y: 12 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.35, delay: i * 0.05 }}
-                      className="rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-black tracking-[0.12em] text-white/85 backdrop-blur-sm"
-                    >
-                      {s}
-                    </motion.span>
-                  ))}
-                </div>
-              </div>
-              <div className="relative overflow-hidden rounded-[24px] border border-white/24 bg-white/10 p-4 backdrop-blur-sm md:p-5">
-                <div className="pointer-events-none absolute inset-2 rounded-[18px] border border-white/22" />
-                <div className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full bg-[var(--brand-primary)]/28 blur-2xl" />
-                <img
-                  src="/images/M7_02104.jpg"
-                  alt="Atelier Microbe"
-                  className="h-56 w-full rounded-[14px] object-cover md:h-72"
+                <motion.img
+                  whileHover={{ scale: 1.08 }}
+                  transition={{ duration: 0.7 }}
+                  src={item.src}
+                  alt={item.title}
+                  className="h-full w-full object-cover grayscale transition duration-700 group-hover:grayscale-0"
                 />
-                <div className="mt-4 flex flex-wrap gap-3">
-                  <Link
-                    href="/collections"
-                    className="inline-flex items-center gap-2 rounded-full border-2 border-[var(--brand-primary)] bg-[var(--brand-primary)] px-5 py-2.5 text-[10px] font-black tracking-[0.12em] text-white transition hover:bg-[var(--brand-primary-dark)]"
-                  >
-                    Explorer
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center gap-2 rounded-full border-2 border-white/60 px-5 py-2.5 text-[10px] font-black tracking-[0.12em] text-white transition hover:bg-white hover:text-stone-900"
-                  >
-                    Nous contacter
-                  </Link>
+                <div className="absolute inset-0 bg-black/28 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="absolute inset-x-0 bottom-0 p-5 opacity-0 translate-y-4 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className="flex items-center justify-between border-t border-white/55 pt-3">
+                    <span className="font-serif text-2xl italic text-white">{item.title}</span>
+                    <ArrowUpRight size={20} className="text-white" />
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function HorizontalShowcase() {
+  const targetRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: targetRef });
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-66%"]);
+  const projects = [
+    { name: spotlightCards[0].title, category: spotlightCards[0].subtitle, src: spotlightCards[0].image, href: spotlightCards[0].href },
+    { name: spotlightCards[1].title, category: spotlightCards[1].subtitle, src: spotlightCards[1].image, href: spotlightCards[1].href },
+    { name: spotlightCards[2].title, category: spotlightCards[2].subtitle, src: spotlightCards[2].image, href: spotlightCards[2].href },
+    { name: "Atelier visuals", category: "Vibration visuelle", src: galleryImages[0], href: "/collections" },
+  ];
+
+  return (
+    <section ref={targetRef} className="relative h-[280vh] bg-black">
+      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+        <motion.div style={{ x }} className="flex gap-8 px-6 md:gap-12 md:px-10">
+          {projects.map((project) => (
+            <Link key={project.name} href={project.href} className="group relative h-[58vh] w-[340px] flex-shrink-0 md:w-[560px]">
+              <img src={project.src} alt={project.name} className="h-full w-full object-cover grayscale transition duration-700 group-hover:scale-[1.04] group-hover:grayscale-0" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+              <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-10">
+                <span className="mb-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60">{project.category}</span>
+                <h3 className="font-serif text-4xl italic text-white md:text-6xl">{project.name}</h3>
+              </div>
+            </Link>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function PhilosophySection() {
+  return (
+    <section className="bg-white py-24 text-black md:py-36">
+      <div className="mx-auto max-w-[1700px] px-5 md:px-10">
+        <div className="mb-12 flex items-center justify-between border-b border-black/10 pb-6">
+          <span className="text-[10px] font-black uppercase tracking-[0.34em]">Process</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.28em] text-black/45">Mr Microbe / home</span>
+        </div>
+        <h2 className="max-w-6xl font-serif text-[clamp(2.4rem,6vw,7rem)] leading-[1.06]">
+          Un chemin clair pour transformer une intention en{" "}
+          <span className="italic text-black/72">presence artistique.</span>
+        </h2>
+        <div className="mt-14 grid gap-12 md:grid-cols-2 md:gap-20">
+          <p className="max-w-xl text-xl leading-relaxed text-black/65">
+            {spotlightCards[1].description}
+          </p>
+          <motion.div
+            initial={{ scale: 0.94, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.1 }}
+            className="aspect-[4/5] overflow-hidden"
+          >
+            <img src={heroSlides[5]} alt="Philosophie" className="h-full w-full object-cover" />
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StickyRevealSection() {
+  const container = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: container, offset: ["start start", "end end"] });
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.16]);
+  const opacity = useTransform(scrollYProgress, [0, 0.55, 1], [1, 1, 0.55]);
+
+  return (
+    <section ref={container} className="relative h-[190vh]">
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <motion.div style={{ scale, opacity }} className="absolute inset-0">
+          <img src={heroSlides[3]} alt="Reveal" className="h-full w-full object-cover grayscale brightness-[0.48]" />
+        </motion.div>
+        <div className="relative z-10 flex h-full items-center justify-center px-6 text-center text-white">
+          <motion.div initial={{ opacity: 0, y: 26 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
+            <span className="mb-4 block text-[10px] font-semibold uppercase tracking-[0.44em] text-white/72">
+              Direction vivante
+            </span>
+            <h2 className="font-serif text-6xl italic md:text-[11rem]">ESSENCE</h2>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StatsSection() {
+  const stats = [
+    { label: "Collections", value: "03" },
+    { label: "Etapes immersion", value: "04" },
+    { label: "Visuels atelier", value: "06" },
+    { label: "Direction", value: "100%" },
+  ];
+
+  return (
+    <section className="bg-neutral-950 py-20 text-white md:py-28">
+      <div className="mx-auto max-w-[1700px] px-5 md:px-10">
+        <div className="grid grid-cols-2 gap-10 lg:grid-cols-4">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: i * 0.08 }}
+              className="border-l border-white/15 pl-6"
+            >
+              <h4 className="font-serif text-5xl md:text-7xl">{stat.value}</h4>
+              <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/48">{stat.label}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ArchiveSection() {
+  return (
+    <section className="border-b border-black/10 bg-white py-20 text-black md:py-32">
+      <div className="mx-auto max-w-[1700px] px-5 md:px-10">
+        <h2 className="mb-10 font-serif text-5xl md:text-7xl">THE ARCHIVE</h2>
+        <div className="flex flex-col">
+          {[
+            { id: "01", title: spotlightCards[0].title, subtitle: spotlightCards[0].description, href: spotlightCards[0].href },
+            { id: "02", title: spotlightCards[1].title, subtitle: spotlightCards[1].description, href: spotlightCards[1].href },
+            { id: "03", title: spotlightCards[2].title, subtitle: spotlightCards[2].description, href: spotlightCards[2].href },
+            { id: "04", title: processSteps[3].title, subtitle: processSteps[3].text, href: "/immersion" },
+          ].map((item) => (
+            <Link
+              key={item.id}
+              href={item.href}
+              className="group relative flex items-center justify-between border-t border-black/10 py-10 transition hover:px-6"
+            >
+              <div className="flex items-baseline gap-6">
+                <span className="text-[11px] text-black/40">{item.id}</span>
+                <div>
+                  <h3 className="font-serif text-4xl uppercase tracking-tight transition group-hover:italic md:text-6xl">{item.title}</h3>
+                  <p className="mt-2 max-w-xl text-sm leading-relaxed text-black/62">{item.subtitle}</p>
                 </div>
               </div>
-            </div>
-          </motion.section>
+              <ArrowUpRight size={34} className="opacity-0 transition group-hover:opacity-100" />
+            </Link>
+          ))}
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.6 }}
+          className="group relative mt-12 overflow-hidden rounded-[30px] border border-white/12 bg-black text-white shadow-[0_45px_90px_-52px_rgba(0,0,0,0.9)]"
+        >
+          <img
+            src={heroSlides[4]}
+            alt="Contact studio"
+            className="absolute inset-0 h-full w-full object-cover opacity-24 transition duration-700 group-hover:scale-[1.04] group-hover:opacity-32"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(112deg,rgba(0,0,0,0.92)_8%,rgba(0,0,0,0.76)_46%,rgba(10,14,24,0.92)_100%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(180deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:52px_52px] opacity-30" />
+          <motion.div
+            aria-hidden
+            animate={{ x: ["-120%", "135%"], opacity: [0.55, 1, 0.55] }}
+            transition={{ duration: 6.2, repeat: Infinity, ease: "linear" }}
+            className="pointer-events-none absolute top-0 z-[2] h-[2px] w-[42%] bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.94)_48%,rgba(188,64,119,0.9)_78%,transparent_100%)]"
+          />
+          <motion.div
+            aria-hidden
+            animate={{ x: ["130%", "-80%"], opacity: [0.4, 0.9, 0.4] }}
+            transition={{ duration: 7.1, repeat: Infinity, ease: "linear" }}
+            className="pointer-events-none absolute bottom-0 z-[2] h-[2px] w-[38%] bg-[linear-gradient(90deg,transparent_0%,rgba(109,213,255,0.6)_46%,rgba(255,255,255,0.86)_72%,transparent_100%)]"
+          />
+          <div className="pointer-events-none absolute -left-12 top-8 h-40 w-40 rounded-full bg-[var(--brand-primary)]/20 blur-3xl" />
+          <div className="pointer-events-none absolute bottom-0 right-0 h-52 w-52 rounded-full bg-cyan-300/14 blur-3xl" />
+          <div className="pointer-events-none absolute inset-0 rounded-[30px] ring-1 ring-inset ring-white/18" />
+          <div className="pointer-events-none absolute left-5 top-5 h-8 w-8 rounded-tl-xl border-l border-t border-white/34" />
+          <div className="pointer-events-none absolute bottom-5 right-5 h-8 w-8 rounded-br-xl border-b border-r border-white/34" />
 
-          <motion.section
-            variants={sectionReveal}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-60px" }}
-            className="relative overflow-hidden border-y border-[var(--brand-primary)]/35 bg-black px-6 py-24 text-white md:px-20 md:py-28"
-          >
-            <div className="pointer-events-none absolute -left-20 top-6 h-44 w-44 rounded-full bg-[var(--brand-primary)]/30 blur-3xl" />
-            <div className="pointer-events-none absolute -right-12 bottom-6 h-52 w-52 rounded-full bg-fuchsia-500/30 blur-3xl" />
-            <div className="pointer-events-none absolute inset-0 opacity-15 [background-image:linear-gradient(to_right,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:48px_48px]" />
-            <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-3">
-              {[
-                ["Impact", "Fort, net, immédiat."],
-                ["Cadence", "Sélection, validation, installation."],
-                ["Signature", "Mr Microbe, sans compromis."],
-              ].map(([title, text], i) => {
-                return (
-                <motion.article
-                  key={String(title)}
-                  initial={{ opacity: 0, y: 22 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.45, delay: i * 0.06 }}
-                  whileHover={{ y: -6 }}
-                  className="group relative overflow-hidden rounded-[22px] border border-white/24 bg-gradient-to-br from-white/16 via-white/10 to-white/5 p-8 transition-all duration-500 hover:-translate-y-2 hover:bg-white/18 hover:shadow-[0_36px_60px_-22px_rgba(0,0,0,0.7)]"
-                >
-                  <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-[var(--brand-primary)]/18 blur-2xl" />
-                  <div className="pointer-events-none absolute inset-2 rounded-[16px] border border-white/24" />
-                  <div className="pointer-events-none absolute inset-5 rounded-[12px] border border-[var(--brand-primary)]/18" />
-                  <h3 className="relative mt-1 font-serif text-5xl leading-none text-white">
-                    {String(title)}
-                  </h3>
-                  <p className="relative mt-4 text-sm tracking-[0.08em] text-white/78">
-                    {String(text)}
-                  </p>
-                  <div className="relative mt-6 h-px w-14 bg-[var(--brand-primary)]/65 transition-all duration-500 group-hover:w-28" />
-                </motion.article>
-              )})}
-            </div>
-          </motion.section>
-
-          <motion.section
-            variants={sectionReveal}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-60px" }}
-            className="relative overflow-hidden border-y border-[var(--brand-primary)]/25 bg-gradient-to-b from-white to-[var(--brand-primary-soft)]/45 px-6 py-24 md:px-20 md:py-28"
-          >
-            <div className="pointer-events-none absolute right-0 top-0 h-32 w-32 bg-[radial-gradient(circle,rgba(188,64,119,0.2),rgba(0,0,0,0))]" />
-            <motion.div
-              animate={{ opacity: [0.08, 0.2, 0.08] }}
-              transition={{ duration: 4.2, repeat: Infinity }}
-              className="pointer-events-none absolute inset-0 [background-image:linear-gradient(to_right,rgba(188,64,119,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(188,64,119,0.08)_1px,transparent_1px)] [background-size:28px_28px]"
-            />
-            <div className="mx-auto max-w-7xl">
-              <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
-                <div>
-                  
-                  <h2 className="mt-4 font-serif text-5xl leading-[1.03] tracking-tight md:text-6xl">
-                    Du brief au mur final.
-                  </h2>
-                </div>
+          <div className="relative z-[3] grid gap-8 px-6 py-10 md:grid-cols-[1fr_0.54fr] md:gap-10 md:px-10 md:py-12">
+            <div>
+              <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[9px] font-black uppercase tracking-[0.3em] text-white/65">
+                Contact studio
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-primary)]" />
+              </p>
+              <p className="mt-5 max-w-3xl font-serif text-[clamp(1.9rem,3vw,2.9rem)] leading-[1.12] text-white">
+                Disponible pour projets sur mesure, collaborations et installations.
+              </p>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/70">
+                Direction artistique, formats, projection et installation pour une presence nette et memorisable.
+              </p>
+              <div className="mt-7 flex flex-wrap items-center gap-3">
+                <MagneticButton>Send Email</MagneticButton>
                 <Link
-                  href="/immersion"
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-[var(--brand-primary)] bg-[var(--brand-primary)] px-7 py-3 text-[10px] font-black tracking-[0.12em] text-white transition hover:bg-[var(--brand-primary-dark)]"
+                  href="/contact"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/8 px-5 py-3 text-[10px] font-black uppercase tracking-[0.22em] text-white transition hover:bg-white hover:text-black"
                 >
-                  Voir l'immersion
+                  Ouvrir
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
+            </div>
 
-              <div className="mb-10 flex items-center justify-between gap-4 rounded-full border border-[var(--brand-primary)]/20 bg-white/70 px-5 py-3.5 backdrop-blur-sm">
-                <p className="text-[10px] font-black tracking-[0.12em] text-[var(--brand-primary-dark)]">
-                  Étape active : {String(activeJourneyStep + 1).padStart(2, "0")}
-                </p>
-                <div className="relative h-1 w-40 overflow-hidden rounded-full bg-[var(--brand-primary)]/18 md:w-64">
-                  <motion.span
-                    className="absolute left-0 top-0 h-full rounded-full bg-[var(--brand-primary)]"
-                    animate={{ width: `${((activeJourneyStep + 1) / 4) * 100}%` }}
-                    transition={{ duration: 0.45, ease: "easeOut" }}
-                  />
-                </div>
-              </div>
-
-              <div className="relative mt-4">
-                <div className="pointer-events-none absolute left-0 right-0 top-[38px] hidden h-px bg-[linear-gradient(to_right,rgba(188,64,119,0.08),rgba(188,64,119,0.6),rgba(188,64,119,0.08))] md:block" />
-                <motion.div
-                  animate={{ backgroundPositionX: ["0%", "100%"] }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  className="pointer-events-none absolute left-0 right-0 top-[38px] hidden h-px opacity-80 md:block [background-image:linear-gradient(to_right,rgba(255,255,255,0),rgba(255,255,255,0.85),rgba(255,255,255,0))] [background-size:220px_100%]"
-                />
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-4 md:gap-5">
-                  {[
-                    ["01", "Brief", "Intentions, espace, dimensions, budget, délai."],
-                    ["02", "Sélection", "Proposition de pièces ou axes sur mesure."],
-                    ["03", "Validation", "Ajustements finaux de format et impact visuel."],
-                    ["04", "Installation", "Accrochage et mise en scène dans le lieu."],
-                  ].map(([step, title, text], i) => (
-                    <motion.article
-                      key={step}
-                      initial={{ opacity: 0, y: 18 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-40px" }}
-                      transition={{ duration: 0.45, delay: i * 0.05 }}
-                      whileHover={{ y: -8, scale: 1.01 }}
-                      animate={
-                        activeJourneyStep === i
-                          ? {
-                              y: -10,
-                              rotateX: -3,
-                              rotateY: i % 2 === 0 ? -2 : 2,
-                              boxShadow:
-                                "0 34px 56px -20px rgba(28,25,23,0.58)",
-                            }
-                          : {
-                              y: 0,
-                              rotateX: 0,
-                              rotateY: 0,
-                              boxShadow:
-                                "0 16px 30px -20px rgba(28,25,23,0.4)",
-                            }
-                      }
-                      className={`group relative overflow-hidden rounded-[24px] border p-6 [transform-style:preserve-3d] transition-all duration-500 ${
-                        activeJourneyStep === i
-                          ? "border-[var(--brand-primary)]/60 bg-gradient-to-br from-white via-[var(--brand-primary-soft)]/45 to-white"
-                          : "border-[var(--brand-primary)]/28 bg-gradient-to-br from-white/95 via-white to-[var(--brand-primary-soft)]/38"
-                      }`}
-                    >
-                      <div className="pointer-events-none absolute inset-[10px] rounded-[16px] border border-[var(--brand-primary)]/14" />
-                      <div className="pointer-events-none absolute inset-[16px] rounded-[12px] border border-white/45" />
-                      <div className="pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-[var(--brand-primary)]/16 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
-                      <div className="pointer-events-none absolute -left-8 -bottom-8 h-20 w-20 rounded-full bg-[var(--brand-primary)]/12 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
-                      {activeJourneyStep === i && (
-                        <motion.div
-                          layoutId="journey-active-glow"
-                          className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_90%_at_100%_0%,rgba(188,64,119,0.24),rgba(255,255,255,0))]"
-                        />
-                      )}
-                      <div className="relative mb-4 flex items-center gap-3">
-                        <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--brand-primary)]/40 bg-white text-[11px] font-black tracking-widest text-[var(--brand-primary-dark)] shadow-[0_10px_20px_-12px_rgba(28,25,23,0.5)]">
-                          {step}
-                        </span>
-                        <span className="relative h-px flex-1 bg-[var(--brand-primary)]/35">
-                          {activeJourneyStep === i && (
-                            <motion.span
-                              className="absolute left-0 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-[var(--brand-primary)]"
-                              animate={{ x: ["0%", "100%"] }}
-                              transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
-                            />
-                          )}
-                        </span>
-                      </div>
-                      <h3 className="relative font-serif text-[2.15rem] leading-none tracking-tight text-stone-900">
-                        {title}
-                      </h3>
-                      <p className="relative mt-3 max-w-[24ch] text-sm leading-relaxed text-stone-700">
-                        {text}
-                      </p>
-                      <motion.div
-                        className="relative mt-4 h-px bg-[var(--brand-primary)]/25"
-                        animate={
-                          activeJourneyStep === i
-                            ? { opacity: [0.4, 1, 0.4], scaleX: [0.9, 1, 0.9] }
-                            : { opacity: 0.35, scaleX: 1 }
-                        }
-                        transition={{ duration: 1.2, repeat: Infinity }}
-                      />
-                    </motion.article>
-                  ))}
-                </div>
+            <div className="rounded-[22px] border border-white/18 bg-white/[0.03] p-5 backdrop-blur-sm md:p-6">
+              <p className="text-[10px] font-black uppercase tracking-[0.26em] text-white/62">TAF precis</p>
+              <div className="mt-5 space-y-3">
+                {[
+                  { key: "01", label: "Direction", value: "Curation visuelle" },
+                  { key: "02", label: "Formats", value: "Petit a grand" },
+                  { key: "03", label: "Delai", value: "Rapide et net" },
+                ].map((item, idx) => (
+                  <motion.div
+                    key={item.key}
+                    initial={{ opacity: 0, x: 12 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.42, delay: idx * 0.08 }}
+                    className="group/item relative overflow-hidden rounded-xl border border-white/12 bg-black/28 px-3 py-3"
+                  >
+                    <motion.div
+                      aria-hidden
+                      animate={{ x: ["-120%", "130%"] }}
+                      transition={{ duration: 4.4 + idx * 0.4, repeat: Infinity, ease: "linear" }}
+                      className="pointer-events-none absolute top-0 h-px w-[48%] bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.88)_48%,rgba(188,64,119,0.82)_78%,transparent_100%)]"
+                    />
+                    <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-white/60">
+                      <span>{item.key}</span>
+                      <span>{item.label}</span>
+                    </div>
+                    <p className="mt-2 text-sm font-medium text-white/88">{item.value}</p>
+                  </motion.div>
+                ))}
               </div>
             </div>
-          </motion.section>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 
-          <SpotlightGrid />
+export default function Home() {
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [loadedHeroSlides, setLoadedHeroSlides] = useState(() => new Set<number>([0]));
 
-          <Lookbook />
+  useEffect(() => {
+    heroSlides.forEach((src, index) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        setLoadedHeroSlides((prev) => {
+          if (prev.has(index)) return prev;
+          const next = new Set(prev);
+          next.add(index);
+          return next;
+        });
+      };
+    });
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroIndex((prev) => {
+        const next = (prev + 1) % heroSlides.length;
+        return loadedHeroSlides.has(next) ? next : prev;
+      });
+    }, 4300);
+    return () => clearInterval(timer);
+  }, [loadedHeroSlides]);
+
+  return (
+    <SmoothScroll>
+      <div className="min-h-screen bg-[#050505] text-neutral-200">
+        <div
+          aria-hidden
+          className="pointer-events-none fixed inset-0 z-[55] h-full w-full opacity-[0.04] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+          }}
+        />
+        <Navbar />
+
+        <main>
+          <HomeHero heroIndex={heroIndex} setHeroIndex={setHeroIndex} />
+          <MasonrySection />
+          <HorizontalShowcase />
+          <PhilosophySection />
+          <StickyRevealSection />
+          <StatsSection />
+          <ArchiveSection />
         </main>
 
         <Footer />

@@ -35,31 +35,8 @@ export const IMAGES = {
 
 // 1. Smooth Scroll Setup (Lenis + GSAP ScrollTrigger doivent partager le même « temps » scroll)
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
-    useEffect(() => {
-        const lenis = new Lenis({
-            duration: 1.5,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            orientation: "vertical",
-            gestureOrientation: "vertical",
-            smoothWheel: true,
-        });
-
-        lenis.on("scroll", ScrollTrigger.update);
-
-        const onTicker = (time: number) => {
-            lenis.raf(time * 1000);
-        };
-        gsap.ticker.add(onTicker);
-        gsap.ticker.lagSmoothing(0);
-
-        requestAnimationFrame(() => ScrollTrigger.refresh());
-
-        return () => {
-            gsap.ticker.remove(onTicker);
-            lenis.destroy();
-        };
-    }, []);
-
+    // Mode stabilite: desactive le moteur de scroll custom pour eviter
+    // les blocages/pertes de fluidite sur machines sensibles.
     return <>{children}</>;
 };
 
@@ -82,7 +59,8 @@ export function Navbar() {
 
     return (
         <motion.nav
-            className="fixed top-0 left-0 w-full z-50 bg-[var(--brand-primary-soft)]/90 px-4 py-4 text-stone-900 backdrop-blur-md md:px-6 md:py-5"
+            style={{ paddingTop: "max(env(safe-area-inset-top), 0.75rem)" }}
+            className="fixed inset-x-0 top-0 z-[100] w-full border-b border-white/10 bg-stone-950/88 px-4 py-3 text-white backdrop-blur-xl md:px-6 md:py-4"
         >
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 md:flex-row md:items-center">
                 <div className="flex items-center justify-between">
@@ -90,7 +68,7 @@ export function Navbar() {
                         <img
                             src="/images/LOGO-MRMICROBE-3D-TRANSPARENT-removebg-preview.png"
                             alt="Logo Mr Microbe 3D"
-                            className="h-14 w-auto object-contain md:h-16"
+                            className="h-10 w-auto object-contain md:h-14"
                             onError={(event) => {
                                 event.currentTarget.src = "/icon.svg";
                             }}
@@ -99,19 +77,19 @@ export function Navbar() {
                     <button
                         type="button"
                         onClick={() => setMobileOpen((v) => !v)}
-                        className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--brand-primary)]/35 bg-white/60 text-stone-900 transition hover:bg-white md:hidden"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white transition hover:bg-white/20 md:hidden"
                         aria-label={mobileOpen ? "Fermer le menu" : "Ouvrir le menu"}
                     >
                         {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                     </button>
                 </div>
 
-                <div className="hidden flex-wrap items-center gap-4 border-t border-[var(--brand-primary)]/20 pt-3 md:ml-auto md:flex md:gap-6 md:border-t-0 md:pt-0 lg:gap-8">
-                    <Link href="/" className="text-[10px] font-black uppercase tracking-[0.3em] text-stone-900 transition-colors hover:text-[var(--brand-primary-dark)]">Accueil</Link>
-                    <Link href="/collections" className="text-[10px] font-black uppercase tracking-[0.3em] text-stone-900 transition-colors hover:text-[var(--brand-primary-dark)]">Collections</Link>
-                    <Link href="/artiste" className="text-[10px] font-black uppercase tracking-[0.3em] text-stone-900 transition-colors hover:text-[var(--brand-primary-dark)]">Artiste</Link>
-                    <Link href="/immersion" className="text-[10px] font-black uppercase tracking-[0.3em] text-stone-900 transition-colors hover:text-[var(--brand-primary-dark)]">Immersion</Link>
-                    <Link href="/contact" className="text-[10px] font-black uppercase tracking-[0.3em] hidden md:inline-flex bg-[var(--brand-primary)] text-white rounded-full px-6 py-2.5 hover:bg-[var(--brand-primary-dark)] transition-all scale-95 hover:scale-100">
+                <div className="hidden flex-wrap items-center gap-4 border-t border-white/10 pt-3 md:ml-auto md:flex md:gap-7 md:border-t-0 md:pt-0">
+                    <Link href="/" className="relative text-xs font-semibold tracking-[0.14em] text-white/82 transition-colors hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-white after:transition-all hover:after:w-full">Accueil</Link>
+                    <Link href="/collections" className="relative text-xs font-semibold tracking-[0.14em] text-white/82 transition-colors hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-white after:transition-all hover:after:w-full">Collections</Link>
+                    <Link href="/artiste" className="relative text-xs font-semibold tracking-[0.14em] text-white/82 transition-colors hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-white after:transition-all hover:after:w-full">Artiste</Link>
+                    <Link href="/immersion" className="relative text-xs font-semibold tracking-[0.14em] text-white/82 transition-colors hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-white after:transition-all hover:after:w-full">Immersion</Link>
+                    <Link href="/contact" className="hidden rounded-full border border-white/25 bg-white/12 px-5 py-2 text-xs font-semibold tracking-[0.14em] text-white transition hover:bg-white hover:text-stone-900 md:inline-flex">
                         Contact
                     </Link>
                 </div>
@@ -126,26 +104,26 @@ export function Navbar() {
                         transition={{ duration: 0.2 }}
                         className="mx-auto mt-3 w-full max-w-sm md:hidden"
                     >
-                        <div className="border border-[var(--brand-primary)]/35 bg-white/92 p-3.5 shadow-[0_16px_32px_-20px_rgba(28,25,23,0.45)] backdrop-blur-sm">
+                        <div className="rounded-2xl border border-white/15 bg-stone-950/95 p-3.5 shadow-[0_16px_32px_-20px_rgba(0,0,0,0.7)] backdrop-blur-sm">
                             <div className="space-y-2.5">
-                                <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center justify-between border border-[var(--brand-primary)]/20 bg-[var(--brand-primary-soft)]/35 px-4 py-3.5 text-[11px] font-black uppercase tracking-[0.24em] text-stone-900 transition hover:bg-[var(--brand-primary-soft)]/55">
+                                <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center justify-between rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-white/12">
                                     <span>Accueil</span>
-                                    <ArrowRight className="h-4 w-4 text-[var(--brand-primary-dark)]" />
+                                    <ArrowRight className="h-4 w-4 text-white/80" />
                                 </Link>
-                                <Link href="/collections" onClick={() => setMobileOpen(false)} className="flex items-center justify-between border border-[var(--brand-primary)]/20 bg-[var(--brand-primary-soft)]/35 px-4 py-3.5 text-[11px] font-black uppercase tracking-[0.24em] text-stone-900 transition hover:bg-[var(--brand-primary-soft)]/55">
+                                <Link href="/collections" onClick={() => setMobileOpen(false)} className="flex items-center justify-between rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-white/12">
                                     <span>Collections</span>
-                                    <ArrowRight className="h-4 w-4 text-[var(--brand-primary-dark)]" />
+                                    <ArrowRight className="h-4 w-4 text-white/80" />
                                 </Link>
-                                <Link href="/artiste" onClick={() => setMobileOpen(false)} className="flex items-center justify-between border border-[var(--brand-primary)]/20 bg-[var(--brand-primary-soft)]/35 px-4 py-3.5 text-[11px] font-black uppercase tracking-[0.24em] text-stone-900 transition hover:bg-[var(--brand-primary-soft)]/55">
+                                <Link href="/artiste" onClick={() => setMobileOpen(false)} className="flex items-center justify-between rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-white/12">
                                     <span>Artiste</span>
-                                    <ArrowRight className="h-4 w-4 text-[var(--brand-primary-dark)]" />
+                                    <ArrowRight className="h-4 w-4 text-white/80" />
                                 </Link>
-                                <Link href="/immersion" onClick={() => setMobileOpen(false)} className="flex items-center justify-between border border-[var(--brand-primary)]/20 bg-[var(--brand-primary-soft)]/35 px-4 py-3.5 text-[11px] font-black uppercase tracking-[0.24em] text-stone-900 transition hover:bg-[var(--brand-primary-soft)]/55">
+                                <Link href="/immersion" onClick={() => setMobileOpen(false)} className="flex items-center justify-between rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-white/12">
                                     <span>Immersion</span>
-                                    <ArrowRight className="h-4 w-4 text-[var(--brand-primary-dark)]" />
+                                    <ArrowRight className="h-4 w-4 text-white/80" />
                                 </Link>
                             </div>
-                            <Link href="/contact" onClick={() => setMobileOpen(false)} className="mt-3 inline-flex w-full items-center justify-center rounded-full bg-[var(--brand-primary)] px-5 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-white transition hover:bg-[var(--brand-primary-dark)]">
+                            <Link href="/contact" onClick={() => setMobileOpen(false)} className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-white/25 bg-white/12 px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-white hover:text-stone-900">
                                 Contact
                             </Link>
                         </div>
@@ -309,7 +287,7 @@ export function SpotlightGrid() {
                         </div>
                     </div>
                     <div className="md:col-span-2 group relative overflow-hidden bg-stone-100 rounded-sm border border-[var(--brand-primary)]/25 shadow-[0_18px_45px_rgba(0,0,0,0.18)]">
-                        <ParallaxImage src="/images/Capture d’écran 2026-03-30 192741.png" alt="Interior" fit="cover" scale={1} disableParallax />
+                        <ParallaxImage src="/images/M7_02134.jpg" alt="Interior" fit="cover" scale={1} disableParallax />
                     </div>
                 </div>
             </div>
@@ -418,123 +396,114 @@ export function TheDialogue() {
 // 9. Editorial Footer
 export function Footer() {
     const [faqActive, setFaqActive] = useState(0);
+    const faqItems = [
+        ["Comment choisir la bonne collection ?", "On lit le lieu puis on propose une sélection claire, ciblée."],
+        ["Peut-on commander une pièce unique ?", "Oui. Brief, format, mood puis création sur mesure."],
+        ["Accompagnement accrochage ?", "Oui. Placement, hauteur, respiration et composition finale."],
+    ] as const;
 
     return (
-        <footer className="bg-stone-900 text-stone-200 px-6 py-32 md:px-20 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-stone-700" />
-
-            <div className="max-w-7xl mx-auto relative z-10">
-                <div className="mb-32 grid grid-cols-1 gap-24">
-                    <div className="flex w-full flex-col gap-16">
-                        <div className="flex flex-col gap-6">
-                            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-stone-500">Navigation</span>
-                            <nav className="flex w-full max-w-5xl flex-col gap-2 font-serif text-4xl leading-tight md:text-5xl">
-                                <a href="/" className="w-full border-b border-white/10 pb-2 transition-all hover:italic hover:translate-x-1">Accueil</a>
-                                <a href="/collections" className="w-full border-b border-white/10 pb-2 transition-all hover:italic hover:translate-x-1">Collections</a>
-                                <a href="/artiste" className="w-full border-b border-white/10 pb-2 transition-all hover:italic hover:translate-x-1">Artiste</a>
-                                <a href="/immersion" className="w-full border-b border-white/10 pb-2 transition-all hover:italic hover:translate-x-1">Immersion</a>
-                                <a href="/contact" className="w-full border-b border-white/10 pb-2 transition-all hover:italic hover:translate-x-1">Contact</a>
-                            </nav>
-                        </div>
+        <footer className="relative overflow-hidden border-t border-white/10 bg-[linear-gradient(120deg,#151515_0%,#1a1518_45%,#141414_100%)] px-6 py-18 text-stone-200 md:px-20 md:py-20">
+            <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(100%_70%_at_12%_12%,rgba(188,64,119,0.14),rgba(0,0,0,0))]" />
+            <div className="mx-auto relative z-10 max-w-7xl">
+                <div className="flex flex-col gap-y-8 border-b border-white/10 pb-10 md:flex-row md:items-start md:gap-x-10 md:gap-y-0">
+                    <div className="space-y-4 md:min-w-0 md:ml-[2px]">
+                        <p className="font-serif text-4xl leading-none text-white md:text-5xl">Mr Microbe</p>
+                        <p className="max-w-sm text-base leading-relaxed text-stone-300">
+                            Direction artistique, collections, immersion et accompagnement sur mesure.
+                        </p>
                     </div>
-                </div>
 
-                <section className="mb-24 border border-white/10 bg-white/[0.02] p-5 md:p-8">
-                    <div className="mb-8 flex items-end justify-between gap-5">
-                        <span className="text-[10px] font-black uppercase tracking-[0.5em] text-[var(--brand-primary-soft)]">
-                            Questions fréquentes
-                        </span>
-                        <div className="hidden items-center gap-2 md:flex">
-                            {[0, 1, 2].map((i) => (
-                                <button
-                                    key={i}
-                                    type="button"
-                                    onClick={() => setFaqActive(i)}
-                                    className={`h-2.5 w-2.5 rounded-full transition ${faqActive === i ? "scale-110 bg-[var(--brand-primary)]" : "bg-[var(--brand-primary)]/30"}`}
-                                    aria-label={`FAQ ${i + 1}`}
-                                />
+                    <div className="space-y-4 md:min-w-0 md:ml-[2px]">
+                        <p className="text-[10px] font-black uppercase tracking-[0.32em] text-[var(--brand-primary-soft)]">Navigation</p>
+                        <nav className="space-y-2 text-base text-stone-300">
+                            <a href="/" className="block transition-colors hover:text-white">Accueil</a>
+                            <a href="/collections" className="block transition-colors hover:text-white">Collections</a>
+                            <a href="/artiste" className="block transition-colors hover:text-white">Artiste</a>
+                            <a href="/immersion" className="block transition-colors hover:text-white">Immersion</a>
+                            <a href="/contact" className="block transition-colors hover:text-white">Contact</a>
+                        </nav>
+                    </div>
+
+                    <div className="space-y-4 md:min-w-0">
+                        <p className="text-[10px] font-black uppercase tracking-[0.32em] text-[var(--brand-primary-soft)]">FAQ</p>
+                        <div className="space-y-2">
+                            {faqItems.map(([question, answer], i) => (
+                                <article
+                                    key={question}
+                                    onMouseEnter={() => setFaqActive(i)}
+                                    onFocusCapture={() => setFaqActive(i)}
+                                    className={cn(
+                                        "rounded-xl border transition",
+                                        faqActive === i
+                                            ? "border-[var(--brand-primary)]/60 bg-white/10"
+                                            : "border-white/10 bg-white/[0.03]"
+                                    )}
+                                >
+                                    <button
+                                        type="button"
+                                        onClick={() => setFaqActive(i)}
+                                        className={cn(
+                                            "block w-full px-3 py-2 text-left text-xs transition",
+                                            faqActive === i ? "text-white" : "text-stone-300 hover:text-white"
+                                        )}
+                                    >
+                                        {question}
+                                    </button>
+                                    {faqActive === i && (
+                                        <p className="border-t border-white/10 px-3 pb-3 pt-2 text-xs leading-relaxed text-stone-200">
+                                            {answer}
+                                        </p>
+                                    )}
+                                </article>
                             ))}
                         </div>
                     </div>
 
-                    <div className="space-y-3">
-                        {[
-                            ["Comment choisir la bonne collection ?", "On lit le lieu, puis on propose court, clair, précis."],
-                            ["Peut-on commander une pièce unique ?", "Oui. Brief, format, mood, puis exécution sur mesure."],
-                            ["Aidez-vous pour l'accrochage ?", "Oui. Placement, hauteur, respiration, composition finale."],
-                        ].map(([q, a], i) => (
-                            <article
-                                key={q}
-                                onMouseEnter={() => setFaqActive(i)}
-                                onClick={() => setFaqActive(i)}
-                                className={cn(
-                                    "group relative cursor-pointer overflow-hidden border p-5 transition-all duration-300 md:p-6",
-                                    faqActive === i
-                                        ? "border-[var(--brand-primary)]/55 bg-white/95 text-stone-900 shadow-[0_18px_36px_-22px_rgba(0,0,0,0.55)]"
-                                        : "border-white/15 bg-white/[0.04] text-stone-100"
-                                )}
+                    <div className="space-y-4 md:min-w-0">
+                        <p className="text-[10px] font-black uppercase tracking-[0.32em] text-[var(--brand-primary-soft)]">Contact</p>
+                        <div className="space-y-2 text-sm text-stone-300">
+                            <a href="mailto:mrmicrobe.furgerot@gmail.com" className="flex items-center gap-2 transition-colors hover:text-white">
+                                <Mail className="h-4 w-4" />
+                                <span>mrmicrobe.furgerot@gmail.com</span>
+                            </a>
+                            <a
+                                href="https://maps.google.com/?q=19+rue+de+saint+gobain+37700+Saint+pierre+des+corps"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex items-center gap-2 transition-colors hover:text-white"
                             >
-                                <div className="relative flex items-start justify-between gap-4">
-                                    <h3 className="font-serif text-2xl leading-tight md:text-3xl">{q}</h3>
-                                    <span
-                                        className={cn(
-                                            "mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border text-xs font-black transition",
-                                            faqActive === i
-                                                ? "border-[var(--brand-primary)] text-[var(--brand-primary-dark)]"
-                                                : "border-white/25 text-white/70"
-                                        )}
-                                    >
-                                        {faqActive === i ? "−" : "+"}
-                                    </span>
-                                </div>
-                                <p
-                                    className={cn(
-                                        "relative mt-3 text-sm leading-relaxed md:text-base",
-                                        faqActive === i ? "opacity-95" : "opacity-70"
-                                    )}
-                                >
-                                    {a}
-                                </p>
-                            </article>
-                        ))}
+                                <MapPin className="h-4 w-4" />
+                                <span>Saint-Pierre-des-Corps (37)</span>
+                            </a>
+                            <a
+                                href="https://www.instagram.com/mrmicrobe.art/"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="flex items-center gap-2 transition-colors hover:text-white"
+                            >
+                                <Instagram className="h-4 w-4" />
+                                <span>Instagram</span>
+                            </a>
+                        </div>
+                        <Link
+                            href="/contact"
+                            className="inline-flex rounded-full border border-[var(--brand-primary)] bg-[var(--brand-primary)] px-5 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-white transition hover:bg-[var(--brand-primary-dark)]"
+                        >
+                            Demander un devis
+                        </Link>
                     </div>
-                </section>
+                </div>
 
-                <div className="pt-24 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12">
-                   
-                    <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 text-[10px] font-black uppercase tracking-[0.35em] text-stone-500">
-                        <a
-                            href="https://www.instagram.com/mrmicrobe.art/"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-2 transition-colors hover:text-stone-200"
-                        >
-                            <Instagram className="h-4 w-4" />
-                            <span>Instagram</span>
-                        </a>
-                        <a
-                            href="https://maps.google.com/?q=19+rue+de+saint+gobain+37700+Saint+pierre+des+corps"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-2 transition-colors hover:text-stone-200"
-                        >
-                            <MapPin className="h-4 w-4" />
-                            <span>Adresse</span>
-                        </a>
-                        <a
-                            href="mailto:mrmicrobe.furgerot@gmail.com"
-                            className="inline-flex items-center gap-2 transition-colors hover:text-stone-200"
-                        >
-                            <Mail className="h-4 w-4" />
-                            <span>Mail</span>
-                        </a>
-                    </div>
-                    <div className="text-[10px] font-black uppercase tracking-[0.5em] text-stone-700">
-                        ©2026 Mr Microbe
+                <div className="flex flex-col gap-3 pt-5 text-[10px] md:flex-row md:items-center md:justify-between">
+                    <p className="font-black uppercase tracking-[0.24em] text-stone-500">© 2026 Mr Microbe. Tous droits réservés.</p>
+                    <div className="flex flex-wrap items-center gap-4 text-[11px] text-stone-500 md:text-xs">
+                        <a href="#" className="transition-colors hover:text-stone-300">Mentions légales</a>
+                        <a href="#" className="transition-colors hover:text-stone-300">Politique de confidentialité</a>
+                        <a href="#" className="transition-colors hover:text-stone-300">Cookies</a>
                     </div>
                 </div>
             </div>
-
         </footer>
     )
 }
